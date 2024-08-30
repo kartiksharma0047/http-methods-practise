@@ -1,6 +1,4 @@
 import express from 'express';
-import url from 'url';
-
 
 const app = express();
 const port = 4000;
@@ -17,6 +15,7 @@ let Data = [
 
 app.get("/", (req, res) => {
     res.send(Data);
+    console.log(req.body)
 });
 
 app.post("/newUser", (req, res) => {
@@ -32,22 +31,23 @@ app.delete("/deleteUser/:id", (req, res) => {
             Data.splice(index, 1);
         }
     });
-    res.send(Data);
+    if (ID > Data.length) {
+        res.status(404).send("User Id in not there");
+    }else{
+        res.send(Data)
+    }
 });
 
 app.put("/updateUser", (req, res) => {
-    const myUrl = url.parse(req.url, true);
-    const urlId = Number(myUrl.query.userId);
-    const urlName = myUrl.query.userName;
-    const urlAge = Number(myUrl.query.userAge);
+    const myData = req.body;
 
     Data.forEach((element) => {
-        if (element.Id === urlId) {
-            if (urlName && urlName.length > 0) {
-                element.Name = urlName;
+        if (element.Id === Number(myData.Id)) {
+            if (myData.Name && myData.Name.length > 0) {
+                element.Name = myData.Name;
             }
-            if (urlAge > 0) {
-                element.Age = urlAge;
+            if (Number(myData.Age) > 0) {
+                element.Age = Number(myData.Age);
             }
         }
     });
