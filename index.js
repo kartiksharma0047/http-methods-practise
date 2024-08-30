@@ -32,7 +32,7 @@ app.delete("/deleteUser/:id", (req, res) => {
         }
     });
     if (ID > Data.length) {
-        res.status(404).send("User Id in not there");
+        res.status(404).send("User Id in not absent in data");
     }else{
         res.send(Data)
     }
